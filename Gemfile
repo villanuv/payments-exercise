@@ -16,6 +16,10 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec-rails'
   gem 'pry'
+  gem 'factory_bot_rails'
+  gem 'shoulda-matchers'
+  gem 'faker'
+  gem 'database_cleaner'
 end
 
 group :development do
