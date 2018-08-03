@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :payments do
+  factory :payment do
     amount { Faker::Number.decimal(3,2) }
     loan_id nil
   end
