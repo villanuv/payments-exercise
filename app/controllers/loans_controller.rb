@@ -9,6 +9,6 @@ class LoansController < ActionController::API
   end
 
   def show
-    render json: Loan.find(params[:id])
+    render json: Loan.find(params[:id]), include: 'payments'
   end
 end
