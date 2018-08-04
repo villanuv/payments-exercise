@@ -1,16 +1,19 @@
 class PaymentsController < ApplicationController
+  before_action :set_loan
+
   def create
-    @payment = Payment.new(payment_params)
-    if @payment.save
-      render json: @payment.to_json
-    else
-      render json: @payment.errors
-    end
+    @loan.payments.create!(payment_params)
+    render json: @loan, status: :created
   end
 
   private
 
-  def payment_params
-    params.require(:payment).permit(:amount)
+  def set_loan
+    @loan = Loan.find(params[:loan_id])
   end
+
+  def payment_params
+    params.permit(:amount)
+  end
+
 end
