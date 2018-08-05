@@ -2,8 +2,12 @@ class PaymentsController < ApplicationController
   before_action :set_loan
 
   def create
-    @loan.payments.create!(payment_params)
-    render json: @loan, status: :created
+    if params[:amount].to_f <= @loan.funded_amount && params[:amount].to_f > 0
+      @loan.payments.create!(payment_params)
+      render json: @loan, status: :created
+    else
+      render json: @loan.errors, status: :unprocessable_entity
+    end
   end
 
   private

@@ -18,6 +18,15 @@ RSpec.describe 'Payments API', type: :request do
       end
     end
 
+    context "when an invalid request" do
+      before { post "/loans/#{loan_id}/payments", params: {} }
+
+      it "returns status code of 422" do
+        expect(response).to have_http_status 422
+      end
+
+    end
+
   end
 
 end
