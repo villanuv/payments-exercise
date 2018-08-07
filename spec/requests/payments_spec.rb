@@ -41,6 +41,12 @@ RSpec.describe 'Payments API', type: :request do
       it "returns status code of 201 (created)" do
         expect(response).to have_http_status 201
       end
+
+      it "updates @loan.funded_amount" do
+        funded_amount_response = json['funded_amount'].to_f
+        manual_calculation = loan.funded_amount - amount[:amount].to_f
+        expect(funded_amount_response).to eq(manual_calculation)
+      end
     end
 
     context "when an invalid request" do
@@ -64,8 +70,6 @@ RSpec.describe 'Payments API', type: :request do
         expect(json['id']).to eq id
       end
     end
-
-
   end
 
 end
