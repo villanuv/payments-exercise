@@ -8,7 +8,7 @@ RSpec.describe 'Payments API', type: :request do
   let(:id) { payments.first.id }
   let(:amount) { { amount: "10.0" } }
 
-  describe 'GET /loans/:loan_id/payments' do
+  describe "GET /loans/:loan_id/payments" do
     before { get "/loans/#{loan_id}/payments" }
 
     context "when loan exists" do
@@ -50,6 +50,22 @@ RSpec.describe 'Payments API', type: :request do
         expect(response).to have_http_status 422
       end
     end
+  end
+
+  describe "GET /loans/:loan_id/payments/:id" do
+    before { get "/loans/#{loan_id}/payments/#{id}" }
+
+    context "when loan payment exists" do
+      it "returns status code 200" do
+        expect(response).to have_http_status 200
+      end
+
+      it "returns the payment" do
+        expect(json['id']).to eq id
+      end
+    end
+
+
   end
 
 end

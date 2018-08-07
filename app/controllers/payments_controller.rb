@@ -1,5 +1,6 @@
 class PaymentsController < ApplicationController
   before_action :set_loan
+  before_action :set_loan_payment, only: [:show]
 
   rescue_from ActiveRecord::RecordNotFound do |exception|
     render json: 'not_found', status: :not_found
@@ -19,11 +20,19 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def show
+    render json: @payment
+  end
+
 
   private
 
   def set_loan
     @loan = Loan.find(params[:loan_id])
+  end
+
+  def set_loan_payment
+    @payment = @loan.payments.find_by!(id: params[:id]) if @loan
   end
 
   def payment_params
