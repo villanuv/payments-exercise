@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Loans API', type: :request do
 
   let!(:loans) { create_list(:loan, 10) }
+  let(:loan) { loans.first }
   let(:loan_id) { loans.first.id }
 
   describe "GET /loans" do
@@ -41,22 +42,6 @@ RSpec.describe 'Loans API', type: :request do
 
       it "returns not found" do
         expect(response.body).to eq "not_found"
-      end
-    end
-  end
-
-  describe 'PUT /loans/:id' do
-    let(:funded_amt) { { funded_amount: 50.0 } }
-
-    context 'when the record exists' do
-      before { put "/loans/#{loan_id}", params: funded_amt }
-
-      it 'updates the record' do
-        expect(response.body).to be_empty
-      end
-
-      it 'returns status code 204' do
-        expect(response).to have_http_status(204)
       end
     end
   end

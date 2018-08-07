@@ -9,13 +9,14 @@ class LoansController < ActionController::API
   end
 
   def show
-    render json: Loan.find(params[:id]), include: 'payments'
+    render json: Loan.find(params[:id])
   end
 
   def update
     Loan.find(params[:id]).update(loan_params)
     head :no_content
   end
+
 
   private
 
