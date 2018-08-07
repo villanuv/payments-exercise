@@ -13,7 +13,7 @@ class PaymentsController < ApplicationController
   def create
     if param_conditions
       @loan.payments.create!(payment_params)
-      @loan.update({ funded_amount: @loan.funded_amount - params[:amount].to_f })
+      loan_update
       render json: @loan, status: :created
     else
       render json: @loan.errors, status: :unprocessable_entity
@@ -41,6 +41,11 @@ class PaymentsController < ApplicationController
 
   def param_conditions
     params[:amount].to_f <= @loan.funded_amount && params[:amount].to_f > 0
+  end
+
+  def loan_update
+    balance = @loan.funded_amount - params[:amount].to_f
+    @loan.update({ funded_amount: balance })
   end
 
 end
