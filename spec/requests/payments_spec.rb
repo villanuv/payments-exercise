@@ -43,18 +43,47 @@ RSpec.describe 'Payments API', type: :request do
       end
 
       it "updates @loan.funded_amount" do
-        funded_amount_response = json['funded_amount'].to_f
-        manual_calculation = loan.funded_amount - amount[:amount].to_f
-        expect(funded_amount_response).to eq(manual_calculation)
+        loan_funded_amt = loan.funded_amount
+        loan_funded_amt_after_update = Loan.find(json['loan_id']).funded_amount
+        expect(loan_funded_amt_after_update).to eq(loan_funded_amt - amount[:amount].to_f)
       end
     end
 
-    context "when an invalid request" do
+    context "when an invalid request: blank" do
       before { post "/loans/#{loan_id}/payments", params: {} }
 
       it "returns status code of 422" do
         expect(response).to have_http_status 422
       end
+
+      it "returns the message can't be blank" do
+        expect(json['amount']).to include "can't be blank"
+      end
+    end
+
+    context "when an invalid request: not a number" do
+      before { post "/loans/#{loan_id}/payments", params: { amount: 'x' } }
+
+      it "returns status code of 422" do
+        expect(response).to have_http_status 422
+      end
+
+      it "returns the message can't be blank" do
+        expect(json['amount']).to include "is not a number"
+      end
+    end
+
+    context "when an invalid request: amount exceeds loan" do
+      before { post "/loans/#{loan_id}/payments", params: { amount: loan.funded_amount + 20 } }
+
+      it "returns status code of 422" do
+        expect(response).to have_http_status 422
+      end
+
+      it "returns the custom message" do
+        expect(json['amount'][0]['message']).to include "payment cannot exceed loan.funded_amount"
+      end
+
     end
   end
 
