@@ -68,7 +68,7 @@ RSpec.describe 'Payments API', type: :request do
         expect(response).to have_http_status 422
       end
 
-      it "returns the message can't be blank" do
+      it "returns the message is not a number" do
         expect(json['amount']).to include "is not a number"
       end
     end
